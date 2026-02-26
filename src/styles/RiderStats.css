@@ -1,0 +1,171 @@
+.stats-container {
+  animation: slideIn 0.4s ease-in;
+}
+
+.stats-container.loading,
+.stats-container.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.stats-container.error {
+  color: #ff6b6b;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.rider-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.rider-number-large {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  min-width: 120px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.rider-details h1 {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.rider-team {
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.rider-country {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.stats-section {
+  background-color: var(--dark-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 25px;
+  transition: all 0.3s ease;
+}
+
+.stats-section:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 15px rgba(227, 6, 19, 0.2);
+}
+
+.stats-section h2 {
+  font-size: 1.4rem;
+  color: var(--accent-gold);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-item:hover {
+  background-color: rgba(227, 6, 19, 0.05);
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .rider-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .rider-number-large {
+    font-size: 3rem;
+  }
+
+  .rider-details h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rider-number-large {
+    font-size: 2.5rem;
+  }
+
+  .rider-details h1 {
+    font-size: 1.4rem;
+  }
+
+  .stat-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
