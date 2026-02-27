@@ -1,69 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Calendar.css';
 
-function Calendar({ races, selectedRider }) {
-  const [expandedRace, setExpandedRace] = useState(null);
+function Calendar() {
+  const [races, setRaces] = useState([]);
+  const [circuits, setCircuits] = useState([]);
+  const [selectedRace, setSelectedRace] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const formatDate = (dateString) => {
-    const options = { month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [racesRes, circuitsRes] = await Promise.all([
+          fetch('http://localhost:3001/api/races'),
+          fetch('http://localhost:3001/api/circuits')
+        ]);
+        const racesData = await racesRes.json();
+        const circuitsData = await circuitsRes.json();
+        setRaces(racesData);
+        setCircuits(circuitsData);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setLoading(false);
+      }
+    };
 
-  const getRaceStatus = (raceDate) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const race = new Date(raceDate);
-    race.setHours(0, 0, 0, 0);
+    fetchData();
+  }, []);
 
-    if (race < today) return 'completed';
-    if (race.getTime() === today.getTime()) return 'current';
-    return 'upcoming';
-  };
+  if (loading) {
+    return <div className="calendar-loading">Loading calendar...</div>;
+  }
 
   return (
-    <div className="calendar">
-      <div className="races-container">
+    <div className="calendar-container">
+      <h2>2026 Calendar</h2>
+      <div className="races-grid">
         {races.map((race) => {
-          const status = getRaceStatus(race.race_date);
-          const isExpanded = expandedRace === race.id;
-
+          const circuit = circuits.find(c => c.id === race.circuit_id);
           return (
-            <div
-              key={race.id}
-              className={`race-card ${status} ${isExpanded ? 'expanded' : ''}`}
-              onClick={() => setExpandedRace(isExpanded ? null : race.id)}
-              onMouseEnter={() => !isExpanded && setExpandedRace(null)}
+            <div 
+              key={race.id} 
+              className="race-card"
+              onClick={() => setSelectedRace(race)}
             >
-              <div className="race-header">
-                <span className="race-round">Round {race.round}</span>
-                <span className="race-name">{race.name}</span>
-                <span className="race-date">{formatDate(race.race_date)}</span>
+              <div className="race-card-header">
+                <h3>{race.name}</h3>
+                <p className="race-date">{new Date(race.race_date).toLocaleDateString()}</p>
               </div>
-
-              {isExpanded && (
-                <div className="race-details">
-                  <div className="circuit-info">
-                    <p><strong>Circuit:</strong> {race.circuit_name}, {race.circuit_country}</p>
-                    <p><strong>Length:</strong> {race.circuit_length} km</p>
-                  </div>
-
-                  {status === 'completed' ? (
-                    <div className="race-results">
-                      <h4>Results</h4>
-                      <p>Click on race for detailed results</p>
-                    </div>
-                  ) : (
-                    <div className="circuit-history">
-                      <h4>Circuit History (Last 3 Years)</h4>
-                      <p>Historical data about past races at this circuit</p>
-                    </div>
-                  )}
+              {circuit && (
+                <div className="race-card-info">
+                  <p className="circuit-name">{circuit.city}, {circuit.country}</p>
                 </div>
               )}
             </div>
           );
         })}
       </div>
+
+      {selectedRace && (
+        <div className="race-modal-overlay" onClick={() => setSelectedRace(null)}>
+          <div className="race-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setSelectedRace(null)}>×</button>
+            <h2>{selectedRace.name}</h2>
+            <p>{new Date(selectedRace.race_date).toLocaleDateString()}</p>
+            {circuits.find(c => c.id === selectedRace.circuit_id) && (
+              <div className="modal-content">
+                <p><strong>Circuit:</strong> {circuits.find(c => c.id === selectedRace.circuit_id).name}</p>
+                <p><strong>Track Length:</strong> {circuits.find(c => c.id === selectedRace.circuit_id).track_length_km} km</p>
+                <p><strong>Turns:</strong> {circuits.find(c => c.id === selectedRace.circuit_id).turns}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

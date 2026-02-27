@@ -1,0 +1,133 @@
+.championship-standings {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.championship-standings h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.standings-table {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.standings-header {
+  display: grid;
+  grid-template-columns: 60px 80px 1fr 100px;
+  gap: 0;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-bottom: 2px solid #FF0000;
+  padding: 0;
+}
+
+.standings-header div {
+  padding: 15px;
+  font-weight: 700;
+  color: #FF0000;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.col-position {
+  text-align: center;
+}
+
+.col-number {
+  text-align: center;
+}
+
+.col-rider {
+  padding-left: 20px;
+}
+
+.col-points {
+  text-align: center;
+}
+
+.standings-row {
+  display: grid;
+  grid-template-columns: 60px 80px 1fr 100px;
+  gap: 0;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.standings-row:hover {
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.standings-row:last-child {
+  border-bottom: none;
+}
+
+.standings-row .col-position {
+  padding: 12px 15px;
+  text-align: center;
+  font-weight: 600;
+  color: #FF0000;
+}
+
+.standings-row .col-number {
+  padding: 12px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 6px;
+  margin: 6px;
+  transition: all 0.3s ease;
+}
+
+.standings-row .col-number:hover {
+  transform: scale(1.05);
+}
+
+.standings-row .col-rider {
+  padding: 12px 20px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.standings-row .col-points {
+  padding: 12px 15px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .standings-header,
+  .standings-row {
+    grid-template-columns: 50px 60px 1fr 80px;
+  }
+
+  .standings-header div {
+    font-size: 0.75rem;
+    padding: 10px;
+  }
+
+  .standings-row .col-number {
+    font-size: 1rem;
+  }
+}

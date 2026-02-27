@@ -1,0 +1,165 @@
+.ai-insights-container {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-insights-container h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  padding: 20px 20px 0 20px;
+  color: #FF0000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.loading,
+.error {
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+  border: 2px solid var(--border-color);
+  border-top-color: #FF0000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  color: #FF0000;
+}
+
+.insight-section {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  animation: slideInUp 0.3s ease-in;
+}
+
+.insight-section:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.insight-section:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.insight-section:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.insight-section:hover {
+  border-color: #FF0000;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.1);
+}
+
+.insight-section h3 {
+  font-size: 1.1rem;
+  color: #FF0000;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.insight-section h4 {
+  font-size: 0.95rem;
+  color: #FFFFFF;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.insight-section p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.insight-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.insight-section li {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  padding-left: 15px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.insight-section li:before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #FF0000;
+}
+
+.prediction-text {
+  font-style: italic;
+  border-left: 3px solid #FF0000;
+  padding-left: 15px;
+  margin-top: 10px;
+}
+
+@media (max-width: 1024px) {
+  .ai-insights-container {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .insight-section {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .insight-section h3 {
+    font-size: 1rem;
+  }
+}
