@@ -1,193 +1,904 @@
+/* ─── Container ──────────────────────────────────────────────────── */
 .calendar-container {
   width: 100%;
   animation: fadeIn 0.4s ease-out;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.calendar-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.calendar-container h2 {
+.calendar-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.4rem;
   color: #FF0000;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 25px;
-  text-align: center;
-}
-
-.races-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.race-card {
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: rgba(255, 0, 0, 0.02);
-}
-
-.race-card:hover {
-  border-color: #FF0000;
-  background-color: rgba(255, 0, 0, 0.1);
-  box-shadow: 0 6px 20px rgba(255, 0, 0, 0.2);
-  transform: translateY(-5px);
-}
-
-.race-card-header h3 {
-  font-size: 1rem;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.race-date {
-  font-size: 0.85rem;
-  color: #FF0000;
-  font-weight: 600;
+  letter-spacing: 2px;
   margin: 0;
 }
 
-.race-card-info {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-color);
-}
-
-.circuit-name {
+.calendar-subtitle {
   font-size: 0.8rem;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
   margin: 0;
 }
 
-.race-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.2s ease;
-}
-
-.race-modal {
-  background: var(--light-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 30px;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
-  border: 1px solid #FF0000;
-  color: #FF0000;
-  font-size: 1.8rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn:hover {
-  background-color: rgba(255, 0, 0, 0.2);
-}
-
-.race-modal h2 {
+.calendar-section-label {
   font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 36px 0 16px;
+}
+
+/* ─── Hub Hero ───────────────────────────────────────────────────── */
+.hub__hero {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 340px;
+  background: #111;
+  cursor: pointer;
+  transition: height 0.55s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.hub__hero--hovered {
+  box-shadow: 0 8px 40px rgba(255,0,0,0.2);
+  border-color: rgba(255,0,0,0.4);
+}
+
+.hub__hero--expanded {
+  height: 780px;
+  border-color: rgba(255,0,0,0.5);
+}
+
+.hub__hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.4s ease;
+}
+
+.hub__hero-photo--loaded { opacity: 1; }
+
+.hub__hero--hovered .hub__hero-photo--loaded {
+  transform: scale(1.02);
+}
+
+.hub__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,10,10,0.2) 0%,
+    rgba(10,10,10,0.88) 100%
+  );
+  transition: background 0.3s ease;
+}
+
+.hub__hero--expanded .hub__hero-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(10,10,10,0.45) 0%,
+    rgba(10,10,10,0.97) 42%
+  );
+}
+
+.hub__hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 28px 32px 0;
+}
+
+.hub__hero-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 0;
+}
+
+.hub__status-badge {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 2px;
   color: #FF0000;
-  margin-bottom: 10px;
+  border: 1px solid rgba(255,0,0,0.5);
+  border-radius: 3px;
+  padding: 4px 10px;
+}
+
+.hub__countdown {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 1px;
+}
+
+.hub__hero-main {
+  position: absolute;
+  bottom: 90px;
+  left: 32px;
+  right: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: bottom 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hub__hero--expanded .hub__hero-main {
+  bottom: 510px;
+}
+
+.hub__round-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.hub__race-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #fff;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 1.5rem;
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
 }
 
-.race-modal p {
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.modal-content {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color);
-}
-
-.modal-content p {
+.hub__location {
   font-size: 0.95rem;
-  color: var(--text-primary);
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+}
+
+.hub__date {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  margin: 0;
+}
+
+/* ─── Click prompt bar ───────────────────────────────────────────── */
+.hub__click-prompt {
+  position: absolute;
+  bottom: 48px;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  background: rgba(255, 0, 0, 0.12);
+  border-top: 1px solid rgba(255,0,0,0.35);
+  border-bottom: 1px solid rgba(255,0,0,0.35);
+  transition: background 0.2s ease, bottom 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hub__click-prompt:hover,
+.hub__click-prompt--open {
+  background: rgba(255,0,0,0.22);
+  animation: none;
+}
+
+.hub__hero--expanded .hub__click-prompt {
+  bottom: 460px;
+}
+
+.hub__click-prompt-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 32px;
+}
+
+.hub__click-prompt-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  color: rgba(255,0,0,0.9);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.hub__click-prompt-icon {
+  font-size: 0.6rem;
+  color: rgba(255,0,0,0.7);
+}
+
+/* ─── Hover peek strip ───────────────────────────────────────────── */
+.hub__hover-peek {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  background: rgba(10,10,10,0.88);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 12px 32px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+.hub__hover-peek--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hub__peek-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  padding: 0 20px;
+}
+
+.hub__peek-stat:first-child { padding-left: 0; }
+.hub__peek-stat:last-child  { border-right: none; }
+
+.hub__peek-val {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.88rem;
+  color: #fff;
+}
+
+.hub__peek-lbl {
+  font-size: 0.58rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Expanded panel ─────────────────────────────────────────────── */
+.hub__expanded-panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hub__expanded-panel--open {
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.hub__expanded-panel--open::-webkit-scrollbar { display: none; }
+
+.hub__expanded-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 28px;
+  padding: 24px 32px 28px;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,0,0,0.15);
+}
+
+.hub__expanded-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  color: #FF0000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 12px;
+}
+
+.hub__expanded-facts,
+.hub__expanded-schedule,
+.hub__expanded-winners,
+.hub__expanded-laps {
+  display: flex;
+  flex-direction: column;
+}
+
+.hub__facts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
   margin-bottom: 12px;
 }
 
-.calendar-loading {
-  text-align: center;
-  padding: 40px;
-  color: var(--text-secondary);
-  font-size: 1rem;
+.hub__fact {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-@media (max-width: 768px) {
-  .calendar-container h2 {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
+.hub__fact-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  color: #fff;
+}
 
-  .races-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-  }
+.hub__fact-label {
+  font-size: 0.58rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-  .race-card {
-    padding: 15px;
-  }
+.hub__track-character {
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 10px;
+}
 
-  .race-card-header h3 {
-    font-size: 0.9rem;
-  }
+/* Schedule */
+.hub__schedule-day {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 8px;
+}
 
-  .race-modal {
-    padding: 20px;
-    max-width: 90%;
-  }
+.hub__schedule-day-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 3px;
+}
 
-  .race-modal h2 {
-    font-size: 1.3rem;
-  }
+.hub__schedule-dayname {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  color: #FF0000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hub__schedule-daydate {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.hub__schedule-session {
+  font-size: 0.72rem;
+  color: var(--text-primary);
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.03);
+  border-left: 2px solid rgba(255,0,0,0.3);
+  border-radius: 0 3px 3px 0;
+  margin-bottom: 2px;
+}
+
+/* Winners */
+.hub__winners {
+  display: flex;
+  flex-direction: column;
+}
+
+.hub__winner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.hub__winner:last-child { border-bottom: none; }
+
+.hub__winner-year {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  color: #FF0000;
+  width: 32px;
+  flex-shrink: 0;
+}
+
+.hub__winner-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hub__winner-rider {
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.hub__winner-team {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.hub__winner-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+/* Fastest laps */
+.hub__laps {
+  display: flex;
+  flex-direction: column;
+}
+
+.hub__lap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.hub__lap:last-child { border-bottom: none; }
+
+.hub__lap-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  color: #FF0000;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.hub__lap-rider {
+  font-size: 0.8rem;
+  color: #fff;
+  flex: 1;
+}
+
+.hub__lap-meta {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+/* ─── Hub Body ───────────────────────────────────────────────────── */
+.hub__body {
+  margin-top: 14px;
+}
+
+.hub__card {
+  background: var(--light-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.hub__card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  color: #FF0000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 16px;
+}
+
+/* Riders */
+.hub__riders {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.hub__rider {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.hub__rider-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 2px solid;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hub__rider-name {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 600;
+  margin: 0 0 2px;
+}
+
+.hub__rider-team {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+
+.hub__rider-reason {
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Schedule Cards Grid ─────────────────────────────────────────── */
+.races-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.schedule-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 200px;
+  background: var(--light-bg);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.schedule-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  border-color: #FF0000;
+}
+
+.schedule-card--past { opacity: 0.5; }
+.schedule-card--past:hover { opacity: 1; }
+.schedule-card--featured { border-color: rgba(255,0,0,0.5); }
+
+.schedule-card__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.schedule-card__photo--loaded { opacity: 1; }
+
+.schedule-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%);
+}
+
+.schedule-card__dot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #FF0000;
+  box-shadow: 0 0 8px rgba(255,0,0,1);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.schedule-card__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.schedule-card__round {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 1.5px;
+  position: absolute;
+  top: 12px;
+  left: 14px;
+}
+
+.schedule-card__flag { font-size: 1.4rem; line-height: 1; margin-bottom: 2px; }
+
+.schedule-card__name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.68rem;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1.3;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.schedule-card__date {
+  font-size: 0.72rem;
+  color: #FF0000;
+  font-weight: 600;
+}
+
+/* ─── Loading ─────────────────────────────────────────────────────── */
+.calendar-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 40px;
+  color: var(--text-secondary);
+}
+
+.calendar-loading__spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border-color);
+  border-top-color: #FF0000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ─── Animations ─────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+@keyframes promptPulse {
+  0%, 100% { background: rgba(255,0,0,0.10); }
+  50%       { background: rgba(255,0,0,0.22); }
+}
+
+/* ─── Timing Tower ───────────────────────────────────────────────── */
+.hub__card--timing { width: 100%; }
+.hub__body--riders { margin-top: 14px; }
+
+.timing-tower__bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.timing-tower__tab {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timing-tower__tab:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+.timing-tower__tab--active {
+  border-color: #FF0000;
+  color: #FF0000;
+  background: rgba(255,0,0,0.08);
+}
+
+.timing-tower__tab--gp.timing-tower__tab--active {
+  background: rgba(255,0,0,0.15);
+  box-shadow: 0 0 12px rgba(255,0,0,0.2);
+}
+
+.timing-tower__tab--sprint.timing-tower__tab--active {
+  border-color: #FF6600;
+  color: #FF6600;
+  background: rgba(255,102,0,0.08);
+}
+
+.timing-tower__table {
+  display: flex;
+  flex-direction: column;
+}
+
+.timing-tower__table--exit {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.timing-tower__table--enter {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.timing-tower__header {
+  display: flex;
+  align-items: center;
+  padding: 0 8px 8px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 2px;
+}
+
+.tt-col {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.52rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tt-col--pos  { width: 32px; flex-shrink: 0; }
+.tt-col--num  { width: 48px; flex-shrink: 0; }
+.tt-col--name { flex: 1; display: flex; align-items: center; gap: 8px; }
+.tt-col--team { width: 160px; flex-shrink: 0; }
+.tt-col--time { width: 90px; flex-shrink: 0; text-align: right; }
+.tt-col--gap  { width: 70px; flex-shrink: 0; text-align: right; }
+
+.timing-tower__row {
+  display: flex;
+  align-items: center;
+  padding: 9px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-radius: 4px;
+  transition: background 0.15s ease;
+  position: relative;
+}
+
+.timing-tower__row:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.timing-tower__row--p1 {
+  background: rgba(255,0,0,0.04);
+}
+
+.timing-tower__row:last-child {
+  border-bottom: none;
+}
+
+.tt-pos {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.tt-pos--gold   { color: #FFD700; }
+.tt-pos--silver { color: #C0C0C0; }
+.tt-pos--bronze { color: #CD7F32; }
+
+.tt-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border: 1.5px solid;
+  border-radius: 4px;
+  padding: 2px 5px;
+  display: inline-block;
+}
+
+.tt-team-bar {
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.tt-name {
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.tt-team {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+}
+
+.tt-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.tt-time--leader {
+  color: #FF0000;
+}
+
+.tt-gap {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.tt-gap-leader {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.15);
+}
+
+.tt-tbd {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.15);
+  font-style: italic;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hub__expanded-inner { grid-template-columns: 1fr; }
+  .hub__riders { grid-template-columns: 1fr; }
+  .hub__race-name { font-size: 1.3rem; }
+  .hub__facts-grid { grid-template-columns: repeat(2, 1fr); }
+  .races-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .schedule-card { height: 170px; }
+  .hub__hero--expanded { height: 1100px; }
+  .tt-col--team { display: none; }
+  .timing-tower__tab { padding: 6px 10px; font-size: 0.55rem; }
+}
+.hub__click-prompt {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  background: rgba(10,10,10,0.92);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.2s ease;
+}
+
+.hub__click-prompt:hover,
+.hub__click-prompt--open {
+  background: rgba(20,20,20,0.98);
+  animation: none;
+}
+
+.hub__hero--expanded .hub__click-prompt {
+  bottom: 460px;
+}
+
+.hub__click-prompt-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 32px;
+}
+
+.hub__click-prompt-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.hub__click-prompt-icon {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.35);
 }
