@@ -1,4 +1,4 @@
-import { apiUrl } from '../api';
+import { apiUrl } from '../api'; // eslint-disable-line no-unused-vars
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/ChampionshipChart.css';
 import RiderStats from './RiderStats';

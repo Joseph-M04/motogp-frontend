@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef, useCallback, useImperativeHandle, forwardRef } from 'react';
 import '../styles/Calendar.css';
 import { apiUrl } from '../api';
@@ -726,7 +727,7 @@ const Calendar = forwardRef(function Calendar({ nextRaceRef, allRoundsRef: exter
   const [races, setRaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRaceId, setSelectedRaceId] = useState(null);
-  const [hubRace, setHubRace] = useState(null);
+  const [hubRace, setHubRace] = useState(null); // eslint-disable-line no-unused-vars
   const [zoomToken, setZoomToken] = useState(0);
   const [lightbox, setLightbox] = useState(null);
   const hubRef = useRef(null);
@@ -768,7 +769,7 @@ const Calendar = forwardRef(function Calendar({ nextRaceRef, allRoundsRef: exter
     if (!match) return;
     setSelectedRaceId(match.id);
     onCalendarRaceHandled?.();
-  }, [selectedCalendarRace, races]);
+  }, [selectedCalendarRace, races, onCalendarRaceHandled]);
 
   useEffect(() => {
     if (!lightbox?.active) return undefined;
