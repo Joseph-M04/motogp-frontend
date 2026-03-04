@@ -7,7 +7,7 @@ import { apiUrl } from './api';
 
 function App() {
   const [riders, setRiders] = useState([]);
-  const [selectedRider, setSelectedRider] = useState(null);
+  const [selectedRider, setSelectedRider] = useState(null); // eslint-disable-line no-unused-vars
   const [selectedCalendarRace, setSelectedCalendarRace] = useState(null);
   const [activeSection, setActiveSection] = useState('chart');
 
