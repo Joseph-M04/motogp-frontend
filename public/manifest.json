@@ -1,6 +1,6 @@
 {
   "short_name": "Grid Report",
-  "name": "Grid Report — 2026 MotoGP Championship Tracker",
+  "name": "GridReport — MotoGP Championship Tracker",
   "description": "Live 2026 MotoGP championship standings, race results, rider stats, and season calendar.",
   "icons": [
     { "src": "favicon.ico", "sizes": "64x64 32x32 24x24 16x16", "type": "image/x-icon" },
