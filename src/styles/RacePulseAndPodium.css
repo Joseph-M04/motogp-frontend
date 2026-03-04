@@ -1,0 +1,201 @@
+.race-pulse-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pulse-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.pulse-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(20, 29, 42, 0.85), rgba(16, 23, 34, 0.76));
+  padding: 18px;
+  box-shadow: var(--elev-1);
+}
+
+.pulse-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.76rem;
+  color: #dbe3ef;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.pulse-main {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.08rem;
+  color: #f5f8fd;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.pulse-meta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.pulse-subheading {
+  margin-top: 6px;
+}
+
+.podium-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: end;
+  padding-top: 8px;
+}
+
+.podium-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.24s ease;
+}
+
+.podium-card:hover {
+  transform: translateY(-3px);
+}
+
+.podium-card--p1 {
+  transform: translateY(-5px);
+}
+
+.podium-card--winner {
+  transform: translateY(-6px);
+}
+
+.podium-card--winner:hover {
+  transform: translateY(-9px);
+}
+
+.podium-pedestal {
+  position: relative;
+  margin-top: auto;
+  width: 100%;
+  border-radius: 12px 12px 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 82px 12px 14px;
+  transform-origin: bottom center;
+  animation: podium-grow 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 24px rgba(4, 8, 16, 0.24);
+}
+
+.podium-pedestal--p1 {
+  height: 236px;
+  border-color: rgba(255, 77, 45, 0.42);
+  animation-delay: 140ms;
+}
+
+.podium-pedestal--p2 {
+  height: 172px;
+  animation-delay: 40ms;
+}
+
+.podium-pedestal--p3 {
+  height: 132px;
+  animation-delay: 220ms;
+}
+
+.podium-pedestal-rank {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: rgba(243, 246, 251, 0.9);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(9, 13, 18, 0.2);
+}
+
+.podium-pedestal-top {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 90%;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.podium-pedestal-data {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.podium-pedestal-stat {
+  font-size: 0.58rem;
+  letter-spacing: 0.07em;
+  color: rgba(219, 227, 239, 0.88);
+  text-align: center;
+  padding: 4px 2px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(9, 13, 18, 0.2);
+}
+
+.podium-pedestal-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.18rem;
+  font-weight: 800;
+  line-height: 1;
+  text-rendering: geometricPrecision;
+  text-shadow: 0 2px 10px rgba(4, 8, 16, 0.22);
+}
+
+.podium-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.84rem;
+  color: #f5f8fd;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  text-align: center;
+  max-width: 92%;
+}
+
+@keyframes podium-grow {
+  from {
+    transform: scaleY(0.06);
+    opacity: 0.35;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1024px) {
+  .pulse-grid,
+  .podium-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .podium-pedestal--p1,
+  .podium-pedestal--p2,
+  .podium-pedestal--p3 {
+    height: 92px;
+  }
+}

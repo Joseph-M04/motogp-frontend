@@ -1,9 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/RiderStats.css';
+import { apiUrl } from '../api';
+import { fetchOfficialCareerStats } from '../data/officialCareerStats';
+
+const TEAM_COLORS = {
+  'Ducati Lenovo Team':               '#CC0000',
+  'BK8 Gresini Racing MotoGP':        '#6BA3E5',
+  'Aprilia Racing':                    '#551A8B',
+  'Red Bull KTM Factory Racing':       '#FF6600',
+  'Red Bull KTM Tech3':                '#FF6600',
+  'Monster Energy Yamaha MotoGP':      '#003B8E',
+  'Pertamina Enduro VR46 Racing Team': '#DAA520',
+  'Prima Pramac Yamaha':               '#004C97',
+  'Trackhouse MotoGP Team':            '#00B4D8',
+  'Honda HRC Castrol':                 '#CC0000',
+  'Castrol Honda LCR':                 '#FFFFFF',
+};
+
+function getNumberStyle(team) {
+  const teamColor = TEAM_COLORS[team] || '#555';
+  const isLight = teamColor === '#e8e8e8';
+  return {
+    color: isLight ? '#c8c8c8' : teamColor,
+    borderColor: isLight ? 'rgba(255,255,255,0.2)' : `${teamColor}66`,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+  };
+}
 
 function RiderStats({ rider }) {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [classBreakdown, setClassBreakdown] = useState(null);
 
   useEffect(() => {
     if (!rider) {
@@ -12,13 +39,29 @@ function RiderStats({ rider }) {
     }
 
     const fetchStats = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(`http://localhost:3001/api/riders/${rider.id}`);
+        const [response, official] = await Promise.all([
+          fetch(apiUrl(`/api/riders/${rider.id}`)),
+          fetchOfficialCareerStats(rider.name).catch(() => null),
+        ]);
+
         const data = await response.json();
+        if (official?.careerStats) {
+          data.careerStats = {
+            ...data.careerStats,
+            ...official.careerStats,
+          };
+          setClassBreakdown(official.classBreakdown || null);
+        } else {
+          setClassBreakdown(null);
+        }
+
         setStats(data);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching stats:', err);
+        setClassBreakdown(null);
         setLoading(false);
       }
     };
@@ -27,37 +70,36 @@ function RiderStats({ rider }) {
   }, [rider]);
 
   if (!stats || loading) {
-    return <div className="stats-container loading">Loading stats</div>;
+    return (
+      <div className="stats-container loading">
+        <div className="skeleton skeleton--header" />
+        <div className="stats-grid">
+          <div className="stats-section">
+            <div className="skeleton skeleton--title" />
+            <div className="skeleton skeleton--line" />
+            <div className="skeleton skeleton--line" />
+            <div className="skeleton skeleton--line" />
+            <div className="skeleton skeleton--line" />
+          </div>
+          <div className="stats-section">
+            <div className="skeleton skeleton--title" />
+            <div className="skeleton skeleton--line" />
+            <div className="skeleton skeleton--line" />
+            <div className="skeleton skeleton--line" />
+            <div className="skeleton skeleton--line" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const seasonStats = stats.seasonStats;
   const careerStats = stats.careerStats;
 
-  const teamColors = {
-    'Ducati Lenovo': '#CE161E',
-    'Gresini Racing': '#6BA3E5',
-    'Aprilia Racing': '#551A8B',
-    'Red Bull KTM Factory': '#FF6600',
-    'Red Bull KTM Tech3': '#FF6600',
-    'Monster Energy Yamaha': '#004B93',
-    'Pertamina Enduro VR46': '#DAFE05',
-    'Prima Pramac Racing': '#663399',
-    'Trackhouse Racing': '#0077C8',
-    'Castrol Honda Racing': '#CC0000',
-    'LCR Honda': '#FF0000',
-    'LCR Honda Idemitsu': '#FF0000',
-  };
-
   return (
     <div className="stats-container">
       <div className="rider-header">
-        <div 
-          className="rider-number-badge"
-          style={{
-            backgroundColor: teamColors[stats.team] || '#daa520',
-            color: ['#FFFF00', '#00AA00', '#DAFE05'].includes(teamColors[stats.team]) ? '#000000' : '#FFFFFF',
-          }}
-        >
+        <div className="rider-number-badge" style={getNumberStyle(stats.team)}>
           {stats.number}
         </div>
         <div className="rider-details">
@@ -124,6 +166,32 @@ function RiderStats({ rider }) {
           </div>
         )}
       </div>
+
+      {classBreakdown && (
+        <div className="stats-section stats-section--full">
+          <h2>Career Breakdown By Class</h2>
+          <div className="class-breakdown-grid">
+            {[
+              ['motogp', 'MotoGP'],
+              ['moto2', 'Moto2'],
+              ['moto3', 'Moto3 / 125cc'],
+            ].map(([key, label]) => {
+              const c = classBreakdown[key];
+              return (
+                <div key={key} className="class-card">
+                  <div className="class-card__title">{label}</div>
+                  <div className="class-card__row"><span>Wins</span><strong>{c?.wins || 0}</strong></div>
+                  <div className="class-card__row"><span>Podiums</span><strong>{c?.podiums || 0}</strong></div>
+                  <div className="class-card__row"><span>Poles</span><strong>{c?.poles || 0}</strong></div>
+                  <div className="class-card__row"><span>Fastest Laps</span><strong>{c?.fastest_laps || 0}</strong></div>
+                  <div className="class-card__row"><span>Races</span><strong>{c?.races || 0}</strong></div>
+                  <div className="class-card__row"><span>Titles</span><strong>{c?.titles || 0}</strong></div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

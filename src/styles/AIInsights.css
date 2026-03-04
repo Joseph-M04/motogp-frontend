@@ -1,11 +1,11 @@
 .ai-insights-container {
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.25s ease-out;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -14,39 +14,27 @@
 }
 
 .ai-insights-container h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.3rem;
-  margin-bottom: 20px;
-  padding: 20px 20px 0 20px;
-  color: #FF0000;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  margin-bottom: 14px;
+  color: #f3f6fb;
+  letter-spacing: 0.01em;
 }
 
 .loading,
 .error {
-  padding: 20px;
-  text-align: center;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  background-color: transparent;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  background: rgba(20, 29, 42, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text-secondary);
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 0.9rem;
+  box-shadow: var(--elev-1);
 }
 
 .loading::after {
-  content: '';
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-left: 10px;
-  border: 2px solid var(--border-color);
-  border-top-color: #FF0000;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  content: none;
 }
 
 @keyframes spin {
@@ -56,67 +44,40 @@
 }
 
 .error {
-  color: #FF0000;
+  color: #ff8d7a;
 }
 
 .insight-section {
-  background-color: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
-  animation: slideInUp 0.3s ease-in;
+  background: rgba(20, 29, 42, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--elev-1);
 }
 
-.insight-section:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.insight-section:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.insight-section:nth-child(4) {
-  animation-delay: 0.3s;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.insight-section:hover {
-  border-color: #FF0000;
-  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.1);
+.loading--skeleton .skeleton--title {
+  width: 30%;
 }
 
 .insight-section h3 {
-  font-size: 1.1rem;
-  color: #FF0000;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: #f3f6fb;
+  margin-bottom: 10px;
 }
 
 .insight-section h4 {
-  font-size: 0.95rem;
-  color: #FFFFFF;
-  margin-top: 12px;
-  margin-bottom: 8px;
-  font-weight: 600;
+  font-size: 0.82rem;
+  color: #dbe3ef;
+  margin: 10px 0 6px;
+  font-weight: 700;
 }
 
 .insight-section p {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.62;
 }
 
 .insight-section ul {
@@ -125,41 +86,45 @@
 }
 
 .insight-section li {
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   color: var(--text-secondary);
-  padding: 6px 0;
-  padding-left: 15px;
+  padding: 5px 0 5px 14px;
   position: relative;
   line-height: 1.5;
 }
 
-.insight-section li:before {
-  content: "▸";
+.insight-section li::before {
+  content: '';
   position: absolute;
   left: 0;
-  color: #FF0000;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
 }
 
 .prediction-text {
-  font-style: italic;
-  border-left: 3px solid #FF0000;
-  padding-left: 15px;
-  margin-top: 10px;
+  border-left: 2px solid rgba(255, 77, 45, 0.6);
+  padding-left: 12px;
+  margin-top: 8px;
 }
 
-@media (max-width: 1024px) {
-  .ai-insights-container {
-    margin-top: 30px;
-  }
+.basis .basis-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.basis .basis-list li {
+  font-size: 0.8rem;
+  color: rgba(219, 227, 239, 0.78);
+  line-height: 1.45;
+  padding: 4px 0 4px 14px;
 }
 
 @media (max-width: 768px) {
   .insight-section {
-    padding: 15px;
-    margin-bottom: 15px;
-  }
-
-  .insight-section h3 {
-    font-size: 1rem;
+    padding: 14px;
   }
 }

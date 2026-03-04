@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/RiderComparison.css';
+import { apiUrl } from '../api';
 
 function RiderComparison({ rider1, rider2, onClearComparison }) {
   const [stats1, setStats1] = useState(null);
@@ -10,8 +11,8 @@ function RiderComparison({ rider1, rider2, onClearComparison }) {
     const fetchStats = async () => {
       try {
         const [res1, res2] = await Promise.all([
-          fetch(`http://localhost:3001/api/riders/${rider1.id}`),
-          fetch(`http://localhost:3001/api/riders/${rider2.id}`)
+          fetch(apiUrl(`/api/riders/${rider1.id}`)),
+          fetch(apiUrl(`/api/riders/${rider2.id}`))
         ]);
         const data1 = await res1.json();
         const data2 = await res2.json();
