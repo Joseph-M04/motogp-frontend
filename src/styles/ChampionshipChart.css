@@ -119,7 +119,7 @@
   color: rgba(255,255,255,0.7);
   white-space: nowrap;
 }
-.standings-list { display: flex; flex-direction: column; gap: 2px; }
+.standings-list { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
 .standings-row { display: grid; grid-template-columns: 32px 40px 22px 1fr 100px 44px 56px; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; user-select: none; }
 .standings-row:hover { background: rgba(255,255,255,0.04); }
 .standings-row--selected { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.1) !important; }
@@ -165,12 +165,13 @@
 .compare-stat--lose .compare-stat__val { color: rgba(255,255,255,0.35); }
 
 .standings-row--extra {
-  max-height: 0;
+  max-height: 0 !important;
   opacity: 0;
   overflow: hidden;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+  border: none !important;
   pointer-events: none;
   transform: translateY(-6px);
   transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1),
