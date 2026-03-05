@@ -1622,3 +1622,19 @@ img, video, canvas, svg {
   overflow-x: hidden;
 }
 }
+@media (max-width: 768px) {
+  .race-lightbox__frame {
+    transition: opacity 0.25s ease !important;
+    top: 5% !important;
+    left: 2% !important;
+    width: 96% !important;
+    height: 90% !important;
+    border-radius: 12px !important;
+  }
+  .race-lightbox__backdrop {
+    transition: opacity 0.25s ease;
+  }
+  .race-lightbox--active .race-lightbox__frame {
+    border-radius: 12px;
+  }
+}

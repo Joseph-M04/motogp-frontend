@@ -478,11 +478,12 @@ function getEnhancedCircuitPhoto(url) {
   try {
     const parsed = new URL(url);
     if (parsed.hostname.includes('unsplash.com')) {
-      parsed.searchParams.set('w', '2400');
-      parsed.searchParams.set('q', '100');
+      const isMobile = window.innerWidth <= 768;
+      parsed.searchParams.set('w', isMobile ? '800' : '2400');
+      parsed.searchParams.set('q', isMobile ? '75' : '100');
       parsed.searchParams.set('auto', 'format');
       parsed.searchParams.set('fit', 'crop');
-      parsed.searchParams.set('sharp', '15');
+      parsed.searchParams.set('sharp', isMobile ? '5' : '15');
       parsed.searchParams.set('sat', '10');
       parsed.searchParams.delete('ixlib');
       parsed.searchParams.delete('ixid');
