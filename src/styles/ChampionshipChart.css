@@ -120,7 +120,7 @@
   white-space: nowrap;
 }
 .standings-list { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
-.standings-row { display: grid; grid-template-columns: 32px 40px 22px auto 1fr 44px 56px; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; user-select: none; }
+.standings-row { display: grid; grid-template-columns: 32px 40px 22px 1fr 44px 56px; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; user-select: none; }
 .standings-row:hover { background: rgba(255,255,255,0.04); }
 .standings-row--selected { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.1) !important; }
 .standings-row--compare { border-color: rgba(255,200,0,0.3) !important; background: rgba(255,200,0,0.04) !important; }
@@ -128,7 +128,7 @@
 .standings-row__rank { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; text-align: right; }
 .standings-row__num { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: 700; border: 1px solid; border-radius: 5px; padding: 2px 5px; text-align: center; }
 .standings-row__flag { font-size: 0.85rem; line-height: 1; }
-.standings-row__name { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; color: #fff; white-space: nowrap; }
+.standings-row__name { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .standings-row__fullname { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 .standings-row__surname { font-weight: 600; color: #fff; }
 .standings-row__firstname { font-size: 0.82rem; color: rgba(255,255,255,0.4); font-weight: 400; }
