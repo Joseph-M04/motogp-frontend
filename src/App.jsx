@@ -11,6 +11,8 @@ function App() {
   const [selectedCalendarRace, setSelectedCalendarRace] = useState(null);
   const [activeSection, setActiveSection] = useState('chart');
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const chartRef = useRef(null);
   const calendarRef = useRef(null);
   const nextRaceRef = useRef(null);
@@ -45,17 +47,21 @@ function App() {
       .catch(() => {});
   }, []);
 
+  // Track active section based on main scroll container
   useEffect(() => {
     const scrollEl = scrollRef.current;
     if (!scrollEl) return;
+
     const handleScroll = () => {
       const sections = [
-        { id: 'chart',      ref: chartRef },
-        { id: 'calendar',   ref: calendarRef },
-        { id: 'nextrace',   ref: nextRaceRef },
-        { id: 'allrounds',  ref: allRoundsRef },
+        { id: 'chart', ref: chartRef },
+        { id: 'calendar', ref: calendarRef },
+        { id: 'nextrace', ref: nextRaceRef },
+        { id: 'allrounds', ref: allRoundsRef },
       ];
+
       const scrollTop = scrollEl.scrollTop + 80;
+
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = sections[i].ref.current;
         if (el && el.offsetTop <= scrollTop) {
@@ -64,6 +70,7 @@ function App() {
         }
       }
     };
+
     scrollEl.addEventListener('scroll', handleScroll);
     return () => scrollEl.removeEventListener('scroll', handleScroll);
   }, []);
@@ -91,19 +98,56 @@ function App() {
     scrollTo(chartRef, 'chart');
   };
 
+  const handleRoundSelect = (race) => {
+    setSelectedCalendarRace(race);
+    setIsDrawerOpen(false);
+    scrollTo(allRoundsRef, 'calendar');
+  };
+
+  // Drawer: lock body scroll + escape to close
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsDrawerOpen(false);
+    };
+
+    if (isDrawerOpen) {
+      document.body.classList.add('body--lock');
+      window.addEventListener('keydown', onKeyDown);
+    } else {
+      document.body.classList.remove('body--lock');
+      window.removeEventListener('keydown', onKeyDown);
+    }
+
+    return () => {
+      document.body.classList.remove('body--lock');
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isDrawerOpen]);
+
   return (
     <div className="app">
       <header className="app-header">
         <div className="app-header__inner">
-          <div className="app-logo" onClick={handleLogoClick}>
+          <button
+            className="mobile-nav-toggle"
+            aria-label="Open menu"
+            onClick={() => setIsDrawerOpen(true)}
+          >
+            <span className="mobile-nav-toggle__bar" />
+            <span className="mobile-nav-toggle__bar" />
+            <span className="mobile-nav-toggle__bar" />
+          </button>
+
+          <div className="app-logo" onClick={handleLogoClick} role="button" tabIndex={0}>
             <span className="app-logo__word">Grid</span>
             <span className="app-logo__word app-logo__word--accent">Report</span>
           </div>
+
           <nav className="app-nav">
             {[
-              { id: 'chart',      label: 'Standings',   ref: chartRef },
-              { id: 'nextrace',   label: 'Next Race',   ref: nextRaceRef },
-              { id: 'calendar',   label: 'Calendar',    ref: allRoundsRef },
+              { id: 'chart', label: 'Standings', ref: chartRef },
+              { id: 'nextrace', label: 'Next Race', ref: nextRaceRef },
+              { id: 'calendar', label: 'Calendar', ref: allRoundsRef },
             ].map(({ id, label, ref }) => (
               <button
                 key={id}
@@ -117,22 +161,52 @@ function App() {
         </div>
       </header>
 
+      {/* Mobile Drawer */}
+      <div className={`mobile-drawer ${isDrawerOpen ? 'mobile-drawer--open' : ''}`}>
+        <div
+          className="mobile-drawer__overlay"
+          onClick={() => setIsDrawerOpen(false)}
+          aria-hidden="true"
+        />
+        <div className="mobile-drawer__panel" role="dialog" aria-modal="true">
+          <div className="mobile-drawer__header">
+            <div className="mobile-drawer__title">Menu</div>
+            <button
+              className="mobile-drawer__close"
+              aria-label="Close menu"
+              onClick={() => setIsDrawerOpen(false)}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="mobile-drawer__content">
+            <Sidebar riders={riders} onRoundSelect={handleRoundSelect} />
+          </div>
+        </div>
+      </div>
+
       <div className="app-container">
-        <aside className="sidebar">
-          <Sidebar riders={riders} onRoundSelect={(race) => { setSelectedCalendarRace(race); scrollTo(allRoundsRef, 'calendar'); }} />
+        {/* Desktop Sidebar */}
+        <aside className="sidebar sidebar--desktop">
+          <Sidebar riders={riders} onRoundSelect={handleRoundSelect} />
         </aside>
 
         <main className="main-content">
           <div className="main-scroll" ref={scrollRef}>
-
             <section ref={chartRef} className="page-section page-section--hero">
               <ChampionshipChart riders={riders} onRiderSelect={handleRiderClick} />
             </section>
 
             <section ref={calendarRef} className="page-section">
-              <Calendar ref={calendarImperativeRef} nextRaceRef={nextRaceRef} allRoundsRef={allRoundsRef} selectedCalendarRace={selectedCalendarRace} onCalendarRaceHandled={() => setSelectedCalendarRace(null)} />
+              <Calendar
+                ref={calendarImperativeRef}
+                nextRaceRef={nextRaceRef}
+                allRoundsRef={allRoundsRef}
+                selectedCalendarRace={selectedCalendarRace}
+                onCalendarRaceHandled={() => setSelectedCalendarRace(null)}
+              />
             </section>
-
           </div>
         </main>
       </div>

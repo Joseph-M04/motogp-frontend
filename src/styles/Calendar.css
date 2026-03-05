@@ -38,6 +38,7 @@
 /* ─── Hub Hero ───────────────────────────────────────────────────── */
 .hub__hero {
   --hub-expanded-height: 500px;
+
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -55,9 +56,10 @@
   transform: none;
 }
 
+/* Keep expanded height tied to a single variable so other transforms stay aligned */
 .hub__hero--expanded {
-  height: 780px;
-  border-color: rgba(255,0,0,0.5);
+  height: calc(340px + var(--hub-expanded-height));
+  border-color: rgba(255, 0, 0, 0.5);
 }
 
 .hub__hero--zoom {
@@ -89,7 +91,9 @@
   transition: opacity 0.6s ease, transform 0.4s ease;
 }
 
-.hub__hero-photo--loaded { opacity: 1; }
+.hub__hero-photo--loaded {
+  opacity: 1;
+}
 
 .hub__hero--hovered .hub__hero-photo--loaded {
   transform: scale(1.02);
@@ -98,11 +102,7 @@
 .hub__hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(7,12,20,0.16) 0%,
-    rgba(7,12,20,0.9) 100%
-  );
+  background: linear-gradient(to bottom, rgba(7, 12, 20, 0.16) 0%, rgba(7, 12, 20, 0.9) 100%);
   transition: background 0.3s ease;
 }
 
@@ -149,11 +149,7 @@
 }
 
 .hub__hero--expanded .hub__hero-overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(10,10,10,0.45) 0%,
-    rgba(10,10,10,0.97) 42%
-  );
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.45) 0%, rgba(10, 10, 10, 0.97) 42%);
 }
 
 .hub__hero-content {
@@ -221,9 +217,15 @@
 }
 
 @keyframes livePulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 141, 141, 0.55); }
-  70% { box-shadow: 0 0 0 8px rgba(255, 141, 141, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 141, 141, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 141, 141, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 141, 141, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 141, 141, 0);
+  }
 }
 
 .hub__hero-main {
@@ -238,13 +240,13 @@
 }
 
 .hub__hero--expanded .hub__hero-main {
-  bottom: 510px;
+  bottom: calc(var(--hub-expanded-height) + 10px);
 }
 
 .hub__round-label {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.64rem;
-  color: rgba(255,255,255,0.56);
+  color: rgba(255, 255, 255, 0.56);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin: 0;
@@ -257,63 +259,80 @@
   letter-spacing: 0;
   margin: 0;
   line-height: 1.1;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
 }
 
 .hub__location {
   font-size: 0.86rem;
-  color: rgba(255,255,255,0.78);
+  color: rgba(255, 255, 255, 0.78);
   margin: 0;
 }
 
 .hub__date {
   font-size: 0.76rem;
-  color: rgba(255,255,255,0.64);
+  color: rgba(255, 255, 255, 0.64);
   margin: 0;
 }
 
-/* ─── Click prompt bar ───────────────────────────────────────────── */
+/* ─── Click prompt bar (SINGLE SOURCE OF TRUTH) ──────────────────── */
 .hub__click-prompt {
   position: absolute;
-  bottom: 48px;
   left: 0;
   right: 0;
+  bottom: 0;
   z-index: 4;
-  background: rgba(255, 0, 0, 0.12);
-  border-top: 1px solid rgba(255,0,0,0.35);
-  border-bottom: 1px solid rgba(255,0,0,0.35);
-  transition: background 0.2s ease, bottom 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+
+  background: rgba(8, 12, 20, 0.78);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+
+  transform: translateY(0);
+  transition: background 0.32s ease, border-color 0.32s ease, transform 0.82s ease-in-out;
+  will-change: transform;
 }
 
 .hub__click-prompt:hover,
 .hub__click-prompt--open {
-  background: rgba(255,0,0,0.22);
-  animation: none;
+  background: rgba(11, 18, 28, 0.9);
+  border-top-color: rgba(255, 255, 255, 0.18);
 }
 
 .hub__hero--expanded .hub__click-prompt {
-  bottom: 460px;
+  transform: translateY(calc(-1 * var(--hub-expanded-height)));
 }
 
 .hub__click-prompt-inner {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 10px 32px;
+  gap: 14px;
+  padding: 11px 24px;
 }
 
 .hub__click-prompt-text {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.62rem;
-  color: rgba(255,0,0,0.9);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 .hub__click-prompt-icon {
-  font-size: 0.6rem;
-  color: rgba(255,0,0,0.7);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.72);
+  transition: transform 0.35s ease, color 0.35s ease;
+}
+
+.hub__click-prompt:hover .hub__click-prompt-icon:first-child,
+.hub__click-prompt--open .hub__click-prompt-icon:first-child {
+  transform: translateX(3px);
+  color: #fff;
+}
+
+.hub__click-prompt:hover .hub__click-prompt-icon:last-child,
+.hub__click-prompt--open .hub__click-prompt-icon:last-child {
+  transform: translateX(-3px);
+  color: #fff;
 }
 
 /* ─── Hover peek strip ───────────────────────────────────────────── */
@@ -326,9 +345,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   gap: 10px;
-  background: rgba(10,10,10,0.88);
+  background: rgba(10, 10, 10, 0.88);
   backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding: 10px 20px;
   opacity: 0;
   transform: translateY(8px);
@@ -390,22 +409,24 @@
   scrollbar-width: none;
 }
 
-.hub__expanded-panel--open::-webkit-scrollbar { display: none; }
+.hub__expanded-panel--open::-webkit-scrollbar {
+  display: none;
+}
 
 .hub__expanded-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px 28px;
   padding: 24px 32px 28px;
-  background: rgba(10,10,10,0.95);
+  background: rgba(10, 10, 10, 0.95);
   backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(255,0,0,0.15);
+  border-top: 1px solid rgba(255, 0, 0, 0.15);
 }
 
 .hub__expanded-label {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.58rem;
-  color: #FF0000;
+  color: #ff0000;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0 0 12px;
@@ -450,7 +471,7 @@
   color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding-top: 10px;
 }
 
@@ -472,7 +493,7 @@
 .hub__schedule-dayname {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.58rem;
-  color: #FF0000;
+  color: #ff0000;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -486,8 +507,8 @@
   font-size: 0.72rem;
   color: var(--text-primary);
   padding: 4px 10px;
-  background: rgba(255,255,255,0.03);
-  border-left: 2px solid rgba(255,0,0,0.3);
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid rgba(255, 0, 0, 0.3);
   border-radius: 0 3px 3px 0;
   margin-bottom: 2px;
 }
@@ -503,15 +524,17 @@
   align-items: center;
   gap: 14px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.hub__winner:last-child { border-bottom: none; }
+.hub__winner:last-child {
+  border-bottom: none;
+}
 
 .hub__winner-year {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.72rem;
-  color: #FF0000;
+  color: #ff0000;
   width: 32px;
   flex-shrink: 0;
 }
@@ -551,15 +574,17 @@
   align-items: center;
   gap: 14px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.hub__lap:last-child { border-bottom: none; }
+.hub__lap:last-child {
+  border-bottom: none;
+}
 
 .hub__lap-time {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.85rem;
-  color: #FF0000;
+  color: #ff0000;
   width: 72px;
   flex-shrink: 0;
 }
@@ -678,9 +703,15 @@
   transform: translateY(-1px) scale(0.99);
 }
 
-.schedule-card--past { opacity: 0.5; }
-.schedule-card--past:hover { opacity: 1; }
-.schedule-card--featured { border-color: rgba(255,0,0,0.5); }
+.schedule-card--past {
+  opacity: 0.5;
+}
+.schedule-card--past:hover {
+  opacity: 1;
+}
+.schedule-card--featured {
+  border-color: rgba(255, 0, 0, 0.5);
+}
 
 .schedule-card__photo {
   position: absolute;
@@ -692,12 +723,19 @@
   transition: opacity 0.5s ease;
 }
 
-.schedule-card__photo--loaded { opacity: 1; }
+.schedule-card__photo--loaded {
+  opacity: 1;
+}
 
 .schedule-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(6,10,18,0.04) 0%, rgba(6,10,18,0.58) 55%, rgba(6,10,18,0.95) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 10, 18, 0.04) 0%,
+    rgba(6, 10, 18, 0.58) 55%,
+    rgba(6, 10, 18, 0.95) 100%
+  );
   pointer-events: none;
 }
 
@@ -709,8 +747,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #FF0000;
-  box-shadow: 0 0 8px rgba(255,0,0,1);
+  background: #ff0000;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 1);
   animation: pulse 2s ease-in-out infinite;
   pointer-events: none;
 }
@@ -730,14 +768,18 @@
 .schedule-card__round {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.55rem;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255, 255, 255, 0.55);
   letter-spacing: 1.5px;
   position: absolute;
   top: 12px;
   left: 14px;
 }
 
-.schedule-card__flag { font-size: 1.4rem; line-height: 1; margin-bottom: 2px; }
+.schedule-card__flag {
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-bottom: 2px;
+}
 
 .schedule-card__name {
   font-family: 'Space Grotesk', sans-serif;
@@ -746,12 +788,12 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.3;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .schedule-card__date {
   font-size: 0.68rem;
-  color: rgba(255,255,255,0.72);
+  color: rgba(255, 255, 255, 0.72);
   font-weight: 500;
 }
 
@@ -771,27 +813,41 @@
 
 /* ─── Animations ─────────────────────────────────────────────────── */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.75); }
-}
-
-@keyframes promptPulse {
-  0%, 100% { background: rgba(255,0,0,0.10); }
-  50%       { background: rgba(255,0,0,0.22); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
 }
 
 /* ─── Timing Tower ───────────────────────────────────────────────── */
-.hub__card--timing { width: 100%; }
-.hub__body--riders { margin-top: 14px; }
+.hub__card--timing {
+  width: 100%;
+}
+.hub__body--riders {
+  margin-top: 14px;
+}
 
 .timing-tower__bar {
   display: flex;
@@ -816,14 +872,14 @@
 }
 
 .timing-tower__tab:hover {
-  border-color: rgba(255,255,255,0.3);
+  border-color: rgba(255, 255, 255, 0.3);
   color: #fff;
 }
 
 .timing-tower__tab--active {
-  border-color: #FF0000;
-  color: #FF0000;
-  background: rgba(255,0,0,0.08);
+  border-color: #ff0000;
+  color: #ff0000;
+  background: rgba(255, 0, 0, 0.08);
 }
 
 .timing-tower__tab--complete {
@@ -840,14 +896,23 @@
 }
 
 .timing-tower__tab--gp.timing-tower__tab--active {
-  background: rgba(255,0,0,0.15);
-  box-shadow: 0 0 12px rgba(255,0,0,0.2);
+  background: rgba(255, 0, 0, 0.15);
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.2);
 }
 
 .timing-tower__tab--sprint.timing-tower__tab--active {
-  border-color: #FF6600;
-  color: #FF6600;
-  background: rgba(255,102,0,0.08);
+  border-color: #ff6600;
+  color: #ff6600;
+  background: rgba(255, 102, 0, 0.08);
+}
+
+/* FIX: Q1/Q2 active styles (no nesting, valid CSS) */
+.timing-tower__tab--q1.timing-tower__tab--active,
+.timing-tower__tab--q2.timing-tower__tab--active {
+  border-color: rgba(50, 220, 100, 0.6);
+  color: #32dc64;
+  background: rgba(50, 220, 100, 0.06);
+  box-shadow: 0 0 12px rgba(50, 220, 100, 0.15);
 }
 
 .timing-tower__table {
@@ -883,30 +948,52 @@
   letter-spacing: 1px;
 }
 
-.tt-col--pos  { width: 32px; flex-shrink: 0; }
-.tt-col--num  { width: 48px; flex-shrink: 0; }
-.tt-col--name { flex: 1; display: flex; align-items: center; gap: 8px; }
-.tt-col--team { width: 160px; flex-shrink: 0; }
-.tt-col--time { width: 90px; flex-shrink: 0; text-align: right; }
-.tt-col--gap  { width: 70px; flex-shrink: 0; text-align: right; }
+.tt-col--pos {
+  width: 32px;
+  flex-shrink: 0;
+}
+.tt-col--num {
+  width: 48px;
+  flex-shrink: 0;
+}
+.tt-col--name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tt-col--team {
+  width: 160px;
+  flex-shrink: 0;
+}
+.tt-col--time {
+  width: 90px;
+  flex-shrink: 0;
+  text-align: right;
+}
+.tt-col--gap {
+  width: 70px;
+  flex-shrink: 0;
+  text-align: right;
+}
 
 .timing-tower__row {
   display: flex;
   align-items: center;
   padding: 9px 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
   border-radius: 4px;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   position: relative;
 }
 
 .timing-tower__row:hover {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   transform: translateX(2px);
 }
 
 .timing-tower__row--p1 {
-  background: rgba(255,0,0,0.04);
+  background: rgba(255, 0, 0, 0.04);
 }
 
 .timing-tower__row:last-child {
@@ -920,9 +1007,15 @@
   font-weight: 600;
 }
 
-.tt-pos--gold   { color: #FFD700; }
-.tt-pos--silver { color: #C0C0C0; }
-.tt-pos--bronze { color: #CD7F32; }
+.tt-pos--gold {
+  color: #ffd700;
+}
+.tt-pos--silver {
+  color: #c0c0c0;
+}
+.tt-pos--bronze {
+  color: #cd7f32;
+}
 
 .tt-num {
   font-family: 'Orbitron', sans-serif;
@@ -959,7 +1052,7 @@
 }
 
 .tt-time--leader {
-  color: #FF0000;
+  color: #ff0000;
 }
 
 .tt-gap {
@@ -969,88 +1062,13 @@
 
 .tt-gap-leader {
   font-size: 0.72rem;
-  color: rgba(255,255,255,0.15);
+  color: rgba(255, 255, 255, 0.15);
 }
 
 .tt-tbd {
   font-size: 0.68rem;
-  color: rgba(255,255,255,0.15);
+  color: rgba(255, 255, 255, 0.15);
   font-style: italic;
-}
-
-/* ─── Responsive ─────────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .hub__expanded-inner { grid-template-columns: 1fr; }
-  .hub__riders { grid-template-columns: 1fr; }
-  .hub__race-name { font-size: 1.3rem; }
-  .hub__facts-grid { grid-template-columns: repeat(2, 1fr); }
-  .races-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  .schedule-card { height: 170px; }
-  .hub__hero--expanded { height: 1100px; }
-  .tt-col--team { display: none; }
-  .timing-tower__tab { padding: 6px 10px; font-size: 0.55rem; }
-  .calendar-loading__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-.hub__click-prompt {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 4;
-  background: rgba(8, 12, 20, 0.78);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  transform: translateY(0);
-  transition:
-    background 0.32s ease,
-    border-color 0.32s ease,
-    transform 0.82s ease-in-out;
-  will-change: transform;
-}
-
-.hub__click-prompt:hover,
-.hub__click-prompt--open {
-  background: rgba(11, 18, 28, 0.9);
-  border-top-color: rgba(255, 255, 255, 0.18);
-}
-
-.hub__hero--expanded .hub__click-prompt {
-  bottom: 0;
-  transform: translateY(calc(-1 * var(--hub-expanded-height)));
-}
-
-.hub__click-prompt-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 11px 24px;
-}
-
-.hub__click-prompt-text {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.85);
-  letter-spacing: 0.02em;
-  text-transform: none;
-}
-
-.hub__click-prompt-icon {
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.72);
-  transition: transform 0.35s ease, color 0.35s ease;
-}
-
-.hub__click-prompt:hover .hub__click-prompt-icon:first-child,
-.hub__click-prompt--open .hub__click-prompt-icon:first-child {
-  transform: translateX(3px);
-  color: #fff;
-}
-
-.hub__click-prompt:hover .hub__click-prompt-icon:last-child,
-.hub__click-prompt--open .hub__click-prompt-icon:last-child {
-  transform: translateX(-3px);
-  color: #fff;
 }
 
 /* ─── Race Image Fullscreen ─────────────────────────────────────── */
@@ -1078,11 +1096,8 @@
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 10px;
   box-shadow: 0 30px 70px rgba(5, 9, 18, 0.5);
-  transition:
-    top 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    left 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    width 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    height 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: top 0.7s cubic-bezier(0.22, 1, 0.36, 1), left 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.7s cubic-bezier(0.22, 1, 0.36, 1), height 0.7s cubic-bezier(0.22, 1, 0.36, 1),
     border-radius 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: top, left, width, height;
 }
@@ -1132,11 +1147,7 @@
   opacity: 0;
   transform: translateY(-8px);
   pointer-events: none;
-  transition:
-    background 0.2s ease,
-    transform 0.35s ease,
-    border-color 0.2s ease,
-    opacity 0.35s ease;
+  transition: background 0.2s ease, transform 0.35s ease, border-color 0.2s ease, opacity 0.35s ease;
 }
 
 .race-lightbox__close:hover {
@@ -1333,7 +1344,50 @@
   color: rgba(245, 248, 253, 0.86);
 }
 
+/* ─── Responsive ─────────────────────────────────────────────────── */
 @media (max-width: 900px) {
+  /* Give mobile more vertical room for expanded content */
+  .hub__hero {
+    --hub-expanded-height: 760px;
+  }
+
+  .hub__expanded-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hub__riders {
+    grid-template-columns: 1fr;
+  }
+
+  .hub__race-name {
+    font-size: 1.3rem;
+  }
+
+  .hub__facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .races-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .schedule-card {
+    height: 170px;
+  }
+
+  .tt-col--team {
+    display: none;
+  }
+
+  .timing-tower__tab {
+    padding: 6px 10px;
+    font-size: 0.55rem;
+  }
+
+  .calendar-loading__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .race-lightbox__info {
     left: 10px;
     right: 10px;
@@ -1374,12 +1428,197 @@
     grid-column: 2;
     text-align: left;
     padding-top: 2px;
-    .timing-tower__tab--q1.timing-tower__tab--active,
-.timing-tower__tab--q2.timing-tower__tab--active {
-  border-color: rgba(50, 220, 100, 0.6);
-  color: #32dc64;
-  background: rgba(50, 220, 100, 0.06);
-  box-shadow: 0 0 12px rgba(50, 220, 100, 0.15);
-}
   }
+/* ────────────────────────────────────────────────────────────────
+   GLOBAL: Kill horizontal scrolling + prevent "wide child" overflow
+──────────────────────────────────────────────────────────────── */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Any main wrappers that might be inside a scroll container */
+.calendar-container,
+.main-scroll,
+.hub,
+.hub__hero,
+.hub__expanded-panel,
+.hub__expanded-inner,
+.hub__body,
+.hub__card,
+.races-grid,
+.race-lightbox,
+.race-lightbox__info,
+.race-lightbox__facts,
+.race-lightbox__grid,
+.race-lightbox__schedule {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Critical for CSS grid items so children are allowed to shrink */
+.hub__expanded-inner > *,
+.hub__hero-main,
+.hub__photo-label,
+.hub__photo-track,
+.hub__photo-place,
+.races-grid > *,
+.schedule-card,
+.schedule-card__content,
+.race-lightbox__grid > *,
+.race-lightbox__facts > * {
+  min-width: 0;
+}
+
+/* Images can still cause overflow if they render wider than container */
+img, video, canvas, svg {
+  max-width: 100%;
+}
+
+/* Race lightbox frame transitions can cause micro-overflow on some browsers */
+.race-lightbox__frame {
+  max-width: calc(100vw - 24px);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   STANDINGS: Fix "Points to leader" bleeding off the edge
+   (targets multiple likely class names to be safe)
+──────────────────────────────────────────────────────────────── */
+.championship-standings,
+.standings,
+.standings-container,
+.standings-card,
+.standings-table,
+.standings__table {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* If your standings uses CSS grid rows/cards */
+.standings-row,
+.standings__row,
+.standings-line,
+.standings__line {
+  min-width: 0;
+}
+
+/* If your standings uses a table */
+.standings-table table,
+.standings__table table {
+  width: 100%;
+  table-layout: fixed; /* key: prevents long cell text from widening table */
+  border-collapse: collapse;
+}
+
+/* Generic cell safety */
+.standings-table td,
+.standings-table th,
+.standings__table td,
+.standings__table th {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* The specific "points to leader" cell (covers common naming) */
+.points-to-leader,
+.pointsToLeader,
+.standings__points-to-leader,
+.standings__pointsToLeader,
+.standings-table td:last-child,
+.standings__table td:last-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+/* If that column needs a guaranteed width, keep it contained */
+.standings-table th:last-child,
+.standings__table th:last-child,
+.standings-table td:last-child,
+.standings__table td:last-child {
+  width: 110px;            /* tweak if needed */
+}
+
+/* ────────────────────────────────────────────────────────────────
+   FORCE FIX: stop last column from ever overflowing
+   Works for flex/grid/table
+──────────────────────────────────────────────────────────────── */
+
+/* Make sure the standings parent itself cannot exceed viewport */
+.championship-standings,
+.championship-standings * {
+  max-width: 100%;
+}
+
+/* If your standings row is FLEX (most common) */
+.championship-standings .row,
+.championship-standings .standings-row,
+.championship-standings .standing-row,
+.championship-standings .standings__row {
+  min-width: 0;
+}
+
+/* If any row container is flex, allow children to shrink */
+.championship-standings .row > *,
+.championship-standings .standings-row > *,
+.championship-standings .standing-row > *,
+.championship-standings .standings__row > * {
+  min-width: 0;
+}
+
+/* Target the LAST column (points-to-leader) no matter what your class is */
+.championship-standings .row > :last-child,
+.championship-standings .standings-row > :last-child,
+.championship-standings .standing-row > :last-child,
+.championship-standings .standings__row > :last-child,
+.championship-standings td:last-child {
+  /* key flex fix */
+  flex: 0 1 110px;          /* can shrink, prefers ~110px */
+  max-width: 110px;
+  min-width: 0;
+
+  /* key overflow fix */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  /* alignment */
+  text-align: right;
+  justify-self: end;
+}
+
+/* If the text is wrapped inside a span/div, clamp that too */
+.championship-standings .row > :last-child *,
+.championship-standings .standings-row > :last-child *,
+.championship-standings .standing-row > :last-child *,
+.championship-standings .standings__row > :last-child * {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* If standings uses CSS GRID rows, force last column to not grow */
+.championship-standings .row,
+.championship-standings .standings-row,
+.championship-standings .standing-row,
+.championship-standings .standings__row {
+  /* harmless if not grid */
+  grid-template-columns: 1fr 110px;
+}
+
+/* Hard kill horizontal scroll for the standings section only */
+.championship-standings {
+  overflow-x: hidden;
+}
 }

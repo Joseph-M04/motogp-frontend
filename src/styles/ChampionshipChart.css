@@ -120,7 +120,7 @@
   white-space: nowrap;
 }
 .standings-list { display: flex; flex-direction: column; gap: 2px; }
-.standings-row { display: grid; grid-template-columns: 32px 40px 22px 1fr 120px 44px 64px; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; user-select: none; }
+.standings-row { display: grid; grid-template-columns: 32px 40px 22px 1fr 100px 44px 56px; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; user-select: none; }
 .standings-row:hover { background: rgba(255,255,255,0.04); }
 .standings-row--selected { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.1) !important; }
 .standings-row--compare { border-color: rgba(255,200,0,0.3) !important; background: rgba(255,200,0,0.04) !important; }
@@ -134,8 +134,8 @@
 .standings-row__bar-wrap { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
 .standings-row__bar { height: 100%; border-radius: 2px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
 .standings-row__pts { font-family: 'Orbitron', sans-serif; font-size: 0.78rem; font-weight: 700; color: #fff; text-align: right; }
-.standings-row__gap { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: rgba(255,255,255,0.3); text-align: right; }
-.standings-row__leader { font-family: 'Orbitron', sans-serif; font-size: 0.55rem; color: #FFD700; letter-spacing: 1px; }
+.standings-row__gap { font-family: 'Inter', sans-serif; font-size: 0.62rem; color: rgba(255,255,255,0.3); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.standings-row__leader { font-family: 'Orbitron', sans-serif; font-size: 0.48rem; color: #FFD700; letter-spacing: 0.5px; white-space: nowrap; }
 
 .stats-panel { margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
 .stats-panel--open { max-height: 1200px; padding-top: 24px; }
