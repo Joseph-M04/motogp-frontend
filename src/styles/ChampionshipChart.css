@@ -193,7 +193,7 @@
 /* smooth container growth for showAll */
 .champ-chart__list-wrapper {
   overflow: hidden;
-  transition: height 0.5s cubic-bezier(0.25, 0.8, 0.4, 1), padding 0.35s ease, opacity 0.35s ease;
+  transition: height 0.35s cubic-bezier(0.25, 0.8, 0.4, 1), padding 0.25s ease, opacity 0.25s ease;
   opacity: 1;
 }
 

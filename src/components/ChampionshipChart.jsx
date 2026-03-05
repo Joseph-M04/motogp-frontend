@@ -38,7 +38,7 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
   const [rendered, setRendered]           = useState(false);
   const dragRiderRef = useRef(null);
   const listRef = useRef(null);
-  const [wrapperHeight, setWrapperHeight] = useState('auto');
+  const [collapsedHeight, setCollapsedHeight] = useState(0);
 
   useEffect(() => {
     const t = setTimeout(() => setRendered(true), 60);
@@ -49,26 +49,16 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
   const leaderPts = sorted[0]?.season_2026_points || 0;
   const displayed = sorted;
 
-  // Smooth height animation for list wrapper
+  // Measure collapsed height (top 10 rows) for smooth reveal
   useEffect(() => {
     const listEl = listRef.current;
     if (!listEl) return;
     const rows = Array.from(listEl.querySelectorAll('.standings-row'));
     if (!rows.length) return;
-
-    const calcCollapsed = () => {
-      // If a rider is opened (inline stats) keep full height so details aren't clipped
-      if (selectedRider) return listEl.scrollHeight;
-      if (isMobile) return listEl.scrollHeight; // mobile: prefer showing full list height even in top-10 mode
-      const firstTen = rows.slice(0, 10);
-      return firstTen.reduce((sum, row) => sum + row.offsetHeight + 2, 0);
-    };
-
-    requestAnimationFrame(() => {
-      const target = showAll ? listEl.scrollHeight : calcCollapsed();
-      setWrapperHeight(`${target}px`);
-    });
-  }, [showAll, riders.length, isMobile, selectedRider]);
+    const firstTen = rows.slice(0, 10);
+    const height = firstTen.reduce((sum, row) => sum + row.offsetHeight + 2, 0);
+    setCollapsedHeight(height || 0);
+  }, [riders.length, rendered]);
 
   const handleRowClick = (rider) => {
     if (selectedRider?.id === rider.id) {
@@ -121,7 +111,11 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
 
       <div
         className="champ-chart__list-wrapper"
-        style={{ height: wrapperHeight }}
+        style={
+          (showAll || isMobile || selectedRider)
+            ? { height: 'auto', overflow: 'visible', paddingBottom: 6 }
+            : { height: collapsedHeight || 760, overflow: 'hidden', paddingBottom: 0 }
+        }
       >
       <div className="standings-list" ref={listRef}>
         {displayed.map((rider, idx) => {
