@@ -1638,3 +1638,24 @@ img, video, canvas, svg {
     border-radius: 12px;
   }
 }
+
+@media (max-width: 768px) {
+  .race-lightbox {
+    transition: none !important;
+  }
+  .race-lightbox__frame {
+    transition: none !important;
+  }
+  .race-lightbox__backdrop {
+    transition: none !important;
+  }
+  .race-lightbox__image {
+    transition: none !important;
+  }
+  .race-lightbox__info {
+    transition: none !important;
+  }
+  .race-lightbox__close {
+    transition: none !important;
+  }
+}
