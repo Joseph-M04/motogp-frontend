@@ -125,8 +125,7 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
               </span>
               <span className="standings-row__flag">{flag}</span>
               <span className="standings-row__name">
-                <span className="standings-row__surname">{rider.name.split(' ').slice(-1)[0]}</span>
-                <span className="standings-row__firstname">{rider.name.split(' ').slice(0, -1).join(' ')}</span>
+                {`${rider.name.split(' ')[0][0]}. ${rider.name.split(' ').slice(1).join(' ')}`}
               </span>
               <div className="standings-row__bar-wrap">
                 <div className="standings-row__bar" style={{ width: `${barPct}%`, background: safeColor }} />
