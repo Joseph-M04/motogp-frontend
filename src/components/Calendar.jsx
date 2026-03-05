@@ -1093,7 +1093,7 @@ const Calendar = forwardRef(function Calendar(
         <div
           className={`race-lightbox ${lightbox.active ? 'race-lightbox--active' : ''} ${
             lightbox.contentVisible ? 'race-lightbox--content-visible' : ''
-          }`}
+          } ${lightbox.closing ? 'race-lightbox--closing' : ''}`}
         >
           <div className="race-lightbox__backdrop" onClick={closeLightbox} />
           <div className="race-lightbox__frame" style={lightbox.style}>

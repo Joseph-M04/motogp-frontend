@@ -1659,3 +1659,9 @@ img, video, canvas, svg {
     transition: none !important;
   }
 }
+
+@media (max-width: 768px) {
+  .race-lightbox--closing {
+    display: none !important;
+  }
+}
