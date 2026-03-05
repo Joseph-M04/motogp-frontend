@@ -34,6 +34,7 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
   const [selectedRider, setSelectedRider] = useState(null);
   const [compareRider, setCompareRider]   = useState(null);
   const [dragOver, setDragOver]           = useState(false);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const [rendered, setRendered]           = useState(false);
   const dragRiderRef = useRef(null);
 
@@ -107,8 +108,8 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
           const safeColor  = color === '#FFFFFF' ? 'rgba(255,255,255,0.8)' : color;
 
           return (
+          <React.Fragment key={rider.id}>
             <div
-              key={rider.id}
               className={`standings-row ${isSelected ? 'standings-row--selected' : ''} ${isCompare ? 'standings-row--compare' : ''} ${idx >= 10 ? 'standings-row--extra' : ''} ${idx >= 10 && showAll ? 'standings-row--extra-visible' : ''}`}
               onClick={() => handleRowClick(rider)}
               draggable={!!selectedRider && selectedRider.id !== rider.id}
@@ -137,67 +138,75 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
                   : `−${gap}`}
               </span>
             </div>
+            {isMobile && (
+              <div className={`standings-row__inline-stats ${isSelected && !compareRider ? 'standings-row__inline-stats--open' : ''}`}>
+                {isSelected && !compareRider && <RiderStats rider={rider} />}
+              </div>
+            )}
+          </React.Fragment>
           );
         })}
       </div>
 
-      <div className={`stats-panel ${selectedRider ? 'stats-panel--open' : ''}`}>
-        {!selectedRider ? (
-          <div className="stats-panel__empty">
-            <span className="stats-panel__empty-icon">↑</span>
-            <p>Click a rider to view their stats</p>
-          </div>
-        ) : compareRider ? (
-          <div className="compare-panel">
-            <div className="compare-panel__header">
-              <button className="compare-panel__close" onClick={clearCompare}>✕ Close comparison</button>
+      {!isMobile && (
+        <div className={`stats-panel ${selectedRider ? 'stats-panel--open' : ''}`}>
+          {!selectedRider ? (
+            <div className="stats-panel__empty">
+              <span className="stats-panel__empty-icon">↑</span>
+              <p>Click a rider to view their stats</p>
             </div>
-            <div className="compare-panel__cols">
-              {[selectedRider, compareRider].map((rider, side) => {
-                const color = getTeamColor(rider.team);
-                const safeColor = color === '#FFFFFF' ? 'rgba(255,255,255,0.8)' : color;
-                return (
-                  <div key={rider.id} className="compare-col">
-                    <div className="compare-col__header" style={{ borderColor: safeColor }}>
-                      <span className="compare-col__num" style={{ color: safeColor }}>{rider.number}</span>
-                      <div>
-                        <div className="compare-col__name">{rider.name}</div>
-                        <div className="compare-col__team" style={{ color: safeColor }}>{rider.team}</div>
-                      </div>
-                    </div>
-                    {statRows.map(row => {
-                      const valA = row.fn(selectedRider);
-                      const valB = row.fn(compareRider);
-                      const val   = side === 0 ? valA : valB;
-                      const other = side === 0 ? valB : valA;
-                      const isWinner = !row.text && (row.higher ? val > other : val < other);
-                      const isLoser  = !row.text && (row.higher ? val < other : val > other);
-                      return (
-                        <div key={row.label} className={`compare-stat ${isWinner ? 'compare-stat--win' : ''} ${isLoser ? 'compare-stat--lose' : ''}`}>
-                          <span className="compare-stat__label">{row.label}</span>
-                          <span className="compare-stat__val">{val}</span>
+          ) : compareRider ? (
+            <div className="compare-panel">
+              <div className="compare-panel__header">
+                <button className="compare-panel__close" onClick={clearCompare}>✕ Close comparison</button>
+              </div>
+              <div className="compare-panel__cols">
+                {[selectedRider, compareRider].map((rider, side) => {
+                  const color = getTeamColor(rider.team);
+                  const safeColor = color === '#FFFFFF' ? 'rgba(255,255,255,0.8)' : color;
+                  return (
+                    <div key={rider.id} className="compare-col">
+                      <div className="compare-col__header" style={{ borderColor: safeColor }}>
+                        <span className="compare-col__num" style={{ color: safeColor }}>{rider.number}</span>
+                        <div>
+                          <div className="compare-col__name">{rider.name}</div>
+                          <div className="compare-col__team" style={{ color: safeColor }}>{rider.team}</div>
                         </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+                      </div>
+                      {statRows.map(row => {
+                        const valA = row.fn(selectedRider);
+                        const valB = row.fn(compareRider);
+                        const val   = side === 0 ? valA : valB;
+                        const other = side === 0 ? valB : valA;
+                        const isWinner = !row.text && (row.higher ? val > other : val < other);
+                        const isLoser  = !row.text && (row.higher ? val < other : val > other);
+                        return (
+                          <div key={row.label} className={`compare-stat ${isWinner ? 'compare-stat--win' : ''} ${isLoser ? 'compare-stat--lose' : ''}`}>
+                            <span className="compare-stat__label">{row.label}</span>
+                            <span className="compare-stat__val">{val}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div
-            className={`single-stats ${dragOver ? 'single-stats--dragover' : ''}`}
-            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={onDropCompare}
-          >
-            <div className="single-stats__drop-hint">
-              {dragOver ? '⚡ Drop to compare' : 'Drag another rider here to compare'}
+          ) : (
+            <div
+              className={`single-stats ${dragOver ? 'single-stats--dragover' : ''}`}
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={onDropCompare}
+            >
+              <div className="single-stats__drop-hint">
+                {dragOver ? '⚡ Drop to compare' : 'Drag another rider here to compare'}
+              </div>
+              <RiderStats rider={selectedRider} />
             </div>
-            <RiderStats rider={selectedRider} />
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
