@@ -37,6 +37,8 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const [rendered, setRendered]           = useState(false);
   const dragRiderRef = useRef(null);
+  const listRef = useRef(null);
+  const [wrapperHeight, setWrapperHeight] = useState('auto');
 
   useEffect(() => {
     const t = setTimeout(() => setRendered(true), 60);
@@ -46,6 +48,27 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
   const sorted = [...riders].sort((a, b) => (b.season_2026_points || 0) - (a.season_2026_points || 0));
   const leaderPts = sorted[0]?.season_2026_points || 0;
   const displayed = sorted;
+
+  // Smooth height animation for list wrapper
+  useEffect(() => {
+    const listEl = listRef.current;
+    if (!listEl) return;
+    const rows = Array.from(listEl.querySelectorAll('.standings-row'));
+    if (!rows.length) return;
+
+    const calcCollapsed = () => {
+      // If a rider is opened (inline stats) keep full height so details aren't clipped
+      if (selectedRider) return listEl.scrollHeight;
+      if (isMobile) return listEl.scrollHeight; // mobile: prefer showing full list height even in top-10 mode
+      const firstTen = rows.slice(0, 10);
+      return firstTen.reduce((sum, row) => sum + row.offsetHeight + 2, 0);
+    };
+
+    requestAnimationFrame(() => {
+      const target = showAll ? listEl.scrollHeight : calcCollapsed();
+      setWrapperHeight(`${target}px`);
+    });
+  }, [showAll, riders.length, isMobile, selectedRider]);
 
   const handleRowClick = (rider) => {
     if (selectedRider?.id === rider.id) {
@@ -96,7 +119,11 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
         </button>
       </div>
 
-      <div className="standings-list">
+      <div
+        className="champ-chart__list-wrapper"
+        style={{ height: wrapperHeight }}
+      >
+      <div className="standings-list" ref={listRef}>
         {displayed.map((rider, idx) => {
           const pts     = rider.season_2026_points || 0;
           const gap     = leaderPts - pts;
@@ -110,7 +137,7 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
           return (
           <React.Fragment key={rider.id}>
             <div
-              className={`standings-row ${isSelected ? 'standings-row--selected' : ''} ${isCompare ? 'standings-row--compare' : ''} ${idx >= 10 ? 'standings-row--extra' : ''} ${idx >= 10 && showAll ? 'standings-row--extra-visible' : ''}`}
+              className={`standings-row ${isSelected ? 'standings-row--selected' : ''} ${isCompare ? 'standings-row--compare' : ''} ${(!showAll && idx >= 10) ? 'standings-row--extra' : ''} ${showAll && idx >= 10 ? 'standings-row--extra-visible' : ''}`}
               onClick={() => handleRowClick(rider)}
               draggable={!!selectedRider && selectedRider.id !== rider.id}
               onDragStart={(e) => onDragStart(e, rider)}
@@ -127,24 +154,25 @@ export default function ChampionshipChart({ riders, onRiderSelect }) {
               <span className="standings-row__name">
                 {`${rider.name.split(' ')[0][0]}. ${rider.name.split(' ').slice(1).join(' ')}`}
               </span>
-              <div className="standings-row__bar-wrap">
-                <div className="standings-row__bar" style={{ width: `${barPct}%`, background: safeColor }} />
+                <span className="standings-row__pts">{pts}</span>
+                <span className="standings-row__gap">
+                  {idx === 0
+                    ? <span className="standings-row__leader">LEADER</span>
+                    : `−${gap}`}
+                </span>
+                <div className="standings-row__bar-wrap">
+                  <div className="standings-row__bar" style={{ width: `${barPct}%`, background: safeColor }} />
+                </div>
               </div>
-              <span className="standings-row__pts">{pts}</span>
-              <span className="standings-row__gap">
-                {idx === 0
-                  ? <span className="standings-row__leader">LEADER</span>
-                  : `−${gap}`}
-              </span>
-            </div>
-            {isMobile && (
-              <div className={`standings-row__inline-stats ${isSelected && !compareRider ? 'standings-row__inline-stats--open' : ''}`}>
-                {isSelected && !compareRider && <RiderStats rider={rider} />}
+            {isMobile && isSelected && !compareRider && (
+              <div className="standings-row__mobile-card">
+                <RiderStats rider={rider} />
               </div>
             )}
           </React.Fragment>
           );
         })}
+      </div>
       </div>
 
       {!isMobile && (

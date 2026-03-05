@@ -1624,44 +1624,19 @@ img, video, canvas, svg {
 }
 @media (max-width: 768px) {
   .race-lightbox__frame {
-    transition: opacity 0.25s ease !important;
     top: 5% !important;
     left: 2% !important;
     width: 96% !important;
     height: 90% !important;
     border-radius: 12px !important;
+    transition: top 0.45s cubic-bezier(0.22,1,0.36,1), left 0.45s cubic-bezier(0.22,1,0.36,1), width 0.45s cubic-bezier(0.22,1,0.36,1), height 0.45s cubic-bezier(0.22,1,0.36,1), border-radius 0.45s cubic-bezier(0.22,1,0.36,1);
   }
   .race-lightbox__backdrop {
-    transition: opacity 0.25s ease;
+    transition: opacity 0.45s ease;
   }
-  .race-lightbox--active .race-lightbox__frame {
-    border-radius: 12px;
-  }
-}
-
-@media (max-width: 768px) {
-  .race-lightbox {
-    transition: none !important;
-  }
-  .race-lightbox__frame {
-    transition: none !important;
-  }
-  .race-lightbox__backdrop {
-    transition: none !important;
-  }
-  .race-lightbox__image {
-    transition: none !important;
-  }
-  .race-lightbox__info {
-    transition: none !important;
-  }
+  .race-lightbox__image,
+  .race-lightbox__info,
   .race-lightbox__close {
-    transition: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .race-lightbox--closing {
-    display: none !important;
+    transition: opacity 0.45s ease, transform 0.45s ease;
   }
 }

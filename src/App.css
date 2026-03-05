@@ -470,11 +470,11 @@ body {
   }
 
   .main-scroll {
-    padding: 18px 16px 28px;
+    padding: 16px 14px 28px;
   }
 
   .page-section {
-    margin-bottom: 64px;
+    margin-bottom: 56px;
   }
 
   .app-nav {
@@ -495,6 +495,18 @@ body {
     font-size: 1.2rem;
   }
 
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 18px;
+  }
+
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
   .standings-header,
   .standings-row {
     padding: 12px 14px;
@@ -508,5 +520,7 @@ body {
     margin-bottom: 48px;
   }
 
-  
+  .page-section {
+    margin-bottom: 48px;
+  }
 }
