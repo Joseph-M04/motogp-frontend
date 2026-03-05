@@ -128,9 +128,10 @@
 .standings-row__rank { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; text-align: right; }
 .standings-row__num { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: 700; border: 1px solid; border-radius: 5px; padding: 2px 5px; text-align: center; }
 .standings-row__flag { font-size: 0.85rem; line-height: 1; }
-.standings-row__name { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.standings-row__surname { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.standings-row__firstname { font-family: 'Inter', sans-serif; font-size: 0.65rem; color: rgba(255,255,255,0.3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.standings-row__name { display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.standings-row__fullname { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.standings-row__surname { font-weight: 600; color: #fff; }
+.standings-row__firstname { font-size: 0.82rem; color: rgba(255,255,255,0.4); font-weight: 400; }
 .standings-row__bar-wrap { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
 .standings-row__bar { height: 100%; border-radius: 2px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
 .standings-row__pts { font-family: 'Orbitron', sans-serif; font-size: 0.78rem; font-weight: 700; color: #fff; text-align: right; }
