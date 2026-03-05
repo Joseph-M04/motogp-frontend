@@ -1119,13 +1119,13 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
-  filter: contrast(1.05) saturate(1.04) brightness(1.02);
+  filter: contrast(1.08) saturate(1.06) brightness(1.04) drop-shadow(0 6px 18px rgba(0,0,0,0.35));
   transition: opacity 0.9s ease, filter 0.6s ease;
 }
 
 .race-lightbox--active .race-lightbox__image {
   opacity: 1;
-  filter: contrast(1.05) saturate(1.04) brightness(1.02);
+  filter: contrast(1.08) saturate(1.06) brightness(1.04) drop-shadow(0 6px 18px rgba(0,0,0,0.35));
 }
 
 .race-lightbox__close {
@@ -1637,7 +1637,12 @@ img, video, canvas, svg {
   .race-lightbox__image,
   .race-lightbox__info,
   .race-lightbox__close {
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  /* Enhance sharpness/contrast on mobile */
+  .race-lightbox__image {
+    filter: contrast(1.14) saturate(1.1) brightness(1.06) drop-shadow(0 12px 28px rgba(0,0,0,0.48));
   }
 
   /* Faster exit to avoid lingering frame on mobile */
