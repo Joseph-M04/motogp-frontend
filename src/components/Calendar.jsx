@@ -1036,6 +1036,7 @@ const Calendar = forwardRef(function Calendar(
       setLightbox(null);
       return;
     }
+    const closingDuration = typeof window !== 'undefined' && window.innerWidth <= 768 ? 320 : 760;
     setLightbox((prev) =>
       prev
         ? {
@@ -1048,7 +1049,7 @@ const Calendar = forwardRef(function Calendar(
         : prev
     );
     if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = window.setTimeout(() => setLightbox(null), 760);
+    closeTimerRef.current = window.setTimeout(() => setLightbox(null), closingDuration);
   };
 
   return (

@@ -1096,9 +1096,9 @@
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 10px;
   box-shadow: 0 30px 70px rgba(5, 9, 18, 0.5);
-  transition: top 0.7s cubic-bezier(0.22, 1, 0.36, 1), left 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    width 0.7s cubic-bezier(0.22, 1, 0.36, 1), height 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: top 0.9s cubic-bezier(0.22, 1, 0.36, 1), left 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.9s cubic-bezier(0.22, 1, 0.36, 1), height 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: top, left, width, height;
 }
 
@@ -1120,7 +1120,7 @@
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
   filter: contrast(1.05) saturate(1.04) brightness(1.02);
-  transition: opacity 0.7s ease, filter 0.35s ease;
+  transition: opacity 0.9s ease, filter 0.6s ease;
 }
 
 .race-lightbox--active .race-lightbox__image {
@@ -1629,7 +1629,7 @@ img, video, canvas, svg {
     width: 96% !important;
     height: 90% !important;
     border-radius: 12px !important;
-    transition: top 0.45s cubic-bezier(0.22,1,0.36,1), left 0.45s cubic-bezier(0.22,1,0.36,1), width 0.45s cubic-bezier(0.22,1,0.36,1), height 0.45s cubic-bezier(0.22,1,0.36,1), border-radius 0.45s cubic-bezier(0.22,1,0.36,1);
+    transition: top 0.6s cubic-bezier(0.22,1,0.36,1), left 0.6s cubic-bezier(0.22,1,0.36,1), width 0.6s cubic-bezier(0.22,1,0.36,1), height 0.6s cubic-bezier(0.22,1,0.36,1), border-radius 0.6s cubic-bezier(0.22,1,0.36,1);
   }
   .race-lightbox__backdrop {
     transition: opacity 0.45s ease;
@@ -1637,6 +1637,26 @@ img, video, canvas, svg {
   .race-lightbox__image,
   .race-lightbox__info,
   .race-lightbox__close {
-    transition: opacity 0.45s ease, transform 0.45s ease;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  /* Faster exit to avoid lingering frame on mobile */
+  .race-lightbox--closing .race-lightbox__frame {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    opacity: 0;
+  }
+  .race-lightbox--closing .race-lightbox__backdrop {
+    transition: opacity 0.25s ease;
+    opacity: 0;
+  }
+  .race-lightbox--closing .race-lightbox__image {
+    transition: opacity 0.2s ease;
+    opacity: 0;
+  }
+  .race-lightbox--closing .race-lightbox__info,
+  .race-lightbox--closing .race-lightbox__close {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+    transform: translateY(6px);
   }
 }
