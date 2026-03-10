@@ -1030,6 +1030,13 @@ const Calendar = forwardRef(function Calendar(
   const localSchedule = lightbox ? buildViewerLocalSchedule(lightbox.race, lightboxData?.schedule) : [];
   const viewerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local Time';
 
+  const fallbackFacts = (race) => ([
+    { label: 'Length', value: race?.circuit_length ? `${race.circuit_length} km` : 'TBD' },
+    { label: 'Race Date', value: race?.race_date ? formatFullDate(race.race_date) : 'TBD' },
+    { label: 'Country', value: race?.circuit_country || 'TBD' },
+    { label: 'Status', value: race?.status || 'Scheduled' },
+  ]);
+
   const closeLightbox = () => {
     const origin = lightboxOriginRef.current;
     if (!origin || !lightbox || lightbox.closing) {
@@ -1055,7 +1062,7 @@ const Calendar = forwardRef(function Calendar(
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <h2 className="calendar-title">2026 Season</h2>
+        <h2 className="calendar-title">Next Race: {featuredRace ? featuredRace.name.replace('Grand Prix of ','').replace('Grand Prix','GP') : 'Loading…'}</h2>
       </div>
 
       {featuredRace && (
@@ -1120,10 +1127,7 @@ const Calendar = forwardRef(function Calendar(
               </div>
 
               <div className="race-lightbox__facts">
-                {(lightboxData?.trackFacts || [
-                  { label: 'Length', value: `${lightbox.race.circuit_length} km` },
-                  { label: 'Race Date', value: formatFullDate(lightbox.race.race_date) },
-                ])
+                {(lightboxData?.trackFacts?.length ? lightboxData.trackFacts : fallbackFacts(lightbox.race))
                   .slice(0, 6)
                   .map((fact, idx) => (
                     <div key={idx} className="race-lightbox__fact">
@@ -1133,7 +1137,9 @@ const Calendar = forwardRef(function Calendar(
                   ))}
               </div>
 
-              {lightboxData?.trackCharacter && <p className="race-lightbox__character">{lightboxData.trackCharacter}</p>}
+              <p className="race-lightbox__character">
+                {lightboxData?.trackCharacter || 'Track insights coming soon. Check back closer to the event.'}
+              </p>
 
               <div className="race-lightbox__grid">
                 <section className="race-lightbox__panel">
@@ -1142,7 +1148,7 @@ const Calendar = forwardRef(function Calendar(
                     <div key={idx} className="race-lightbox__row">
                       <span className="race-lightbox__row-year">{winner.year}</span>
                       <span className="race-lightbox__row-main">{winner.rider}</span>
-                      <span className="race-lightbox__row-meta">{winner.time}</span>
+                      <span className="race-lightbox__row-meta">{winner.time || winner.team || ''}</span>
                     </div>
                   ))}
                   {!lightboxData?.previousWinners?.length && <p className="race-lightbox__empty">No winner history available.</p>}

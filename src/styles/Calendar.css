@@ -1115,7 +1115,7 @@
   object-fit: cover;
   object-position: center;
   opacity: 1;
-  image-rendering: auto;
+  image-rendering: high-quality;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);

@@ -68,10 +68,10 @@ body {
 
 .app-header__inner {
   height: 100%;
-  padding: 0 30px;
+  padding: 0 22px;
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 24px;
 }
 
 /* Mobile hamburger toggle (hidden on desktop) */
@@ -85,7 +85,8 @@ body {
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .mobile-nav-toggle__bar {
@@ -105,7 +106,7 @@ body {
 
 .app-logo__word {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--text-primary);
@@ -118,21 +119,21 @@ body {
 .app-nav {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-left: auto;
 }
 
 .app-nav__btn {
   position: relative;
   font-family: 'Manrope', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   color: var(--text-secondary);
   background: transparent;
   border: 1px solid transparent;
-  padding: 8px 14px;
-  border-radius: 999px;
+  padding: 7px 12px;
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -457,12 +458,14 @@ body {
 /* Tablet + down: use drawer for sidebar */
 @media (max-width: 1024px) {
   .app-header__inner {
-    padding: 0 14px;
-    gap: 14px;
+    padding: 0 12px;
+    gap: 10px;
   }
 
   .mobile-nav-toggle {
     display: inline-flex;
+    width: 40px;
+    height: 40px;
   }
 
   .sidebar--desktop {
@@ -470,7 +473,7 @@ body {
   }
 
   .main-scroll {
-    padding: 16px 14px 28px;
+    padding: 14px 12px 24px;
   }
 
   .page-section {
@@ -478,15 +481,15 @@ body {
   }
 
   .app-nav {
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 2px;
+    gap: 4px;
+    overflow-x: visible;
+    padding-bottom: 0;
   }
 
   .app-nav__btn {
     white-space: nowrap;
-    font-size: 0.76rem;
-    padding: 7px 12px;
+    font-size: 0.72rem;
+    padding: 6px 10px;
   }
 }
 

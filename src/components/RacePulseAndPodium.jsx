@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 import '../styles/RacePulseAndPodium.css';
 
-const FP1_RESULTS = [72, 49, 89, 79, 37, 93, 63, 21, 73, 10, 25, 36, 42, 5, 23, 11, 33, 20, 12, 43, 7];
-const PRACTICE_RESULTS = [72, 93, 49, 37, 89, 73, 36, 33, 79, 5, 10, 12, 21, 25, 63, 20, 23, 11, 43, 42, 7];
 const TEAM_COLORS = {
   'Ducati Lenovo Team':               '#CC0000',
   'BK8 Gresini Racing MotoGP':        '#6BA3E5',
@@ -68,8 +66,8 @@ function getNumberStyle(team) {
 }
 
 function getPedestalMeta(rider) {
-  const fp1Pos = FP1_RESULTS.indexOf(rider.number);
-  const practicePos = PRACTICE_RESULTS.indexOf(rider.number);
+  const fp1Pos = rider.fp1Pos ?? null;
+  const practicePos = rider.practicePos ?? null;
   const fp1 = fp1Pos >= 0 ? fp1Pos + 1 : null;
   const pr = practicePos >= 0 ? practicePos + 1 : null;
   const delta = fp1 && pr ? fp1 - pr : null;
@@ -82,16 +80,23 @@ function getPedestalMeta(rider) {
 }
 
 function RacePulseAndPodium({ riders, onRiderSelect }) {
-  const riderMap = useMemo(() => byNumberMap(riders), [riders]);
+  const orderedRiders = useMemo(
+    () => [...riders].sort((a, b) => (b.season_2026_points || 0) - (a.season_2026_points || 0) || (a.number - b.number)),
+    [riders]
+  );
+  const riderMap = useMemo(() => byNumberMap(orderedRiders), [orderedRiders]);
+
+  // Use current standings as placeholder session order until live session timing is available
+  const practiceOrder = useMemo(() => orderedRiders.map((r) => r.number), [orderedRiders]);
+  const fp1Order = practiceOrder;
+  const practicePosMap = useMemo(() => getSessionPositionMap(practiceOrder), [practiceOrder]);
+  const fp1PosMap = useMemo(() => getSessionPositionMap(fp1Order), [fp1Order]);
 
   const pulse = useMemo(() => {
-    const fp1Pos = getSessionPositionMap(FP1_RESULTS);
-    const practicePos = getSessionPositionMap(PRACTICE_RESULTS);
-
     let bestDelta = { rider: null, delta: 0 };
-    PRACTICE_RESULTS.forEach((num) => {
-      const before = fp1Pos.get(num);
-      const after = practicePos.get(num);
+    practiceOrder.forEach((num) => {
+      const before = fp1PosMap.get(num);
+      const after = practicePosMap.get(num);
       if (before && after) {
         const delta = before - after;
         if (delta > bestDelta.delta) {
@@ -100,7 +105,7 @@ function RacePulseAndPodium({ riders, onRiderSelect }) {
       }
     });
 
-    const leader = riderMap.get(PRACTICE_RESULTS[0]) || null;
+    const leader = riderMap.get(practiceOrder[0]) || null;
     const hotLap = '1:28.526';
     return {
       leader,
@@ -109,13 +114,22 @@ function RacePulseAndPodium({ riders, onRiderSelect }) {
       weather: '34C air / high humidity / dry track',
       next: 'Q1-Q2 tomorrow - 10:50 local',
     };
-  }, [riderMap]);
+  }, [practiceOrder, fp1PosMap, practicePosMap, riderMap]);
 
   const podium = useMemo(() => buildPodiumPrediction(riders), [riders]);
   const displayPodium = useMemo(() => {
     const byRank = new Map(podium.map((entry) => [entry.rank, entry]));
-    return [byRank.get(2), byRank.get(1), byRank.get(3)].filter(Boolean);
-  }, [podium]);
+    return [byRank.get(2), byRank.get(1), byRank.get(3)]
+      .filter(Boolean)
+      .map((entry) => ({
+        ...entry,
+        rider: {
+          ...entry.rider,
+          practicePos: practicePosMap.get(entry.rider.number) ?? null,
+          fp1Pos: fp1PosMap.get(entry.rider.number) ?? null,
+        },
+      }));
+  }, [podium, practicePosMap, fp1PosMap]);
 
   return (
     <section className="race-pulse-section">
